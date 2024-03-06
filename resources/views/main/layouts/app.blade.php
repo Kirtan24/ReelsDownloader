@@ -17,6 +17,32 @@
             border: 2px solid #6c757a;
             border-radius: 10px;
         }
+        .navbar-brand img {
+      width: 30px;
+      height: 30px;
+      margin-right: 8px;
+    }
+    .form-control:focus {
+      /* box-shadow: 0 0 0 0.2rem rgba(0, 0, 0, 0.25); */
+      box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+      border-color: black;
+    }
+    .btn-search {
+      background-color: #343a40;
+      color: white;
+    }
+    .video-section {
+      position: relative;
+    
+      height: 300px;
+      overflow: hidden;
+    }
+    .video-section video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+    }
     </style>
 
 </head>

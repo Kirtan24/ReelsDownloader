@@ -11,6 +11,53 @@
     <title>Reel Downloader</title>
 
     <style>
+
+/* Custom CSS for dropdown */
+.navbar-nav .nav-item.dropdown:hover .dropdown-menu {
+  display: block;
+}
+.nav-link{
+  transition:all 0.2s ease-in-out;
+}
+.nav-link:hover {
+  color:black;
+}
+.dropdown-menu {
+  margin-top: 0;
+  background-color: #fff;
+  border-radius: 5px;
+}
+
+.dropdown-item {
+  transition:all 0.2s ease-in-out;
+  font-weight:100;
+}
+
+.dropdown-item:hover {
+  color:black;
+  font-weight:400;
+  padding-left:20px;
+  background-color: #f8f9fa;
+}
+
+::-webkit-scrollbar-track
+{
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	background-color: #fff;
+}
+
+::-webkit-scrollbar
+{
+	width: 5px;
+	background-color: #fff;
+}
+
+::-webkit-scrollbar-thumb
+{
+	background-color: #000;
+  border-radius:5px;
+}
+
         .border-outer {
             display: inline-block;
             padding: 2px;
@@ -33,7 +80,7 @@
     }
     .video-section {
       position: relative;
-    
+
       height: 300px;
       overflow: hidden;
     }
@@ -43,13 +90,34 @@
       left: 0;
       height: 100%;
     }
+
+    .footer{
+      position: fixed;
+      bottom:0;
+      width:100%;
+      background-color:#fff;
+    }
     </style>
 
 </head>
 <body>
+    <!-- Navbar -->
+      @include('main.layouts.header')
+    <!-- /Navbar -->
 
-    @yield('content')
+    <!-- Content -->
+      @yield('content')
+    <!-- /Content -->
 
+    <!-- Navbar -->
+      @include('main.layouts.footer')
+    <!-- /Navbar -->
+
+    <script>
+      document.querySelector('.navbar-toggle').addEventListener('click', function() {
+        document.querySelector('.navbar-links').classList.toggle('open');
+      });
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 </body>
 </html>

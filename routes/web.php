@@ -20,5 +20,5 @@ Route::get('/', function () {
 });
 
 Route::get('/reels',[ReelsController::class,'index'])->name('home');
-// Route::get('/reels/download',[ReelsController::class,'downloadReels'])->name('download');
 Route::post('/download-reels', [InstagramController::class, 'downloadReels'])->name('download');
+Route::get('/proxy-instagram-video', 'InstagramController@proxyInstagramVideo');

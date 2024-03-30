@@ -1,7 +1,6 @@
 @extends('main.layouts.app')
 
 @section('content')
-<!-- Content Section -->
 <section class="py-5 mb-3">
   <div class="container">
     <div class="row justify-content-center mb-5">
@@ -23,12 +22,6 @@
         </button>
         <span>Story</span>
       </div>
-      <!-- <div class="row col text-center">
-        <button class="btn" type="button" id="button-music">
-          <img class="img-fluid" src="{{asset('images/music.gif')}}" width="50px" height="50px" alt="Music">
-        </button>
-        <span>Music</span>
-      </div> -->
     </div>
 
     <div class="row justify-content-center">
@@ -46,22 +39,16 @@
           </div>
           <button class="btn btn-dark" type="button" id="searchButton">Search</button>
         </form>
+
+        <div class="video-container mt-3">
+                  <div class="text-left">
+                    <img src="https://proxy.mediadownloader.app/get?__sig=BcgFedWQrVCoeddsgTkzmg&__expires=1711777749&uri=https%3A%2F%2Finstagram.fcai19-5.fna.fbcdn.net%2Fv%2Ft51.29350-15%2F434678537_293982490238452_8806089932300817191_n.jpg%3Fstp%3Ddst-jpg_e15_fr_p1080x1080%26_nc_ht%3Dinstagram.fcai19-5.fna.fbcdn.net%26_nc_cat%3D1%26_nc_ohc%3DH1uELiaQ7sUAX-Nf3Ck%26edm%3DAP_V10EBAAAA%26ccb%3D7-5%26oh%3D00_AfCR_BAdZiZFDqw2DBQm_jAcRPS_4hmIYV6jV65HEYtHvA%26oe%3D660829BB%26_nc_sid%3D2999b8&__srvid=instagram&__cid=mTY2wLHa1yPMcXBdrchsqQ" alt="Thumbnails" id="thumb" style="border-radius:20px;" width="200" height="200">
+                  </div>
+                  <button class="btn btn-primary mt-3" id="downloadButton">Download</button>
+                </div>
       </div>
     </div>
-    <div class="preview-section">
-     <!-- <div class="video-container mt-3">
-       <div class="text-center">
-         <video width="280" height="500" style="border-radius:20px;" controls>
-           <source src="{{asset('videos/oggy.mp4')}}" type="video/mp4">
-           Your browser does not support the video tag.
-         </video>
-       </div> -->
-     <!-- </div>
-     <div class="row justify-content-center mt-3">
-       <div class="text-center">
-         <a class="btn btn-dark" id="download-link" href="{{asset('videos/oggy.mp4')}}" download>Download Video</a>
-       </div>
-     </div> -->
+    <div class="preview-section" id="preview-section">
     </div>
   </div>
 </section>
@@ -76,7 +63,6 @@
   }
 
   $(document).ready(function() {
-    // Set CSRF token for all AJAX requests
     $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -111,7 +97,6 @@ $("#button-music").click(function (e) {
   $("#url").attr("placeholder", "Paste Instagram music link here");
 });
 
-    // Click event handler for Search button
     $("#searchButton").click(function() {
       var instagramLink = $("#url").val();
       
@@ -120,16 +105,19 @@ $("#button-music").click(function (e) {
           method: 'POST',
           contentType: 'application/json',
           data: JSON.stringify({ reels_url: instagramLink }),
-          success: function(data) {
-            var copiedLinkHtml = "<p>Copied Link: " + instagramLink + "</p>";
-            var videoHtml = `<div class="video-container mt-3">
-              <div class="text-center">
-                <video width="280" height="500" id="reelsVideo" style="border-radius:20px;" controls>
-                  <source src="${data.video_url}" type="video/mp4">
-                  Your browser does not support the video tag.
-                </video>
-              </div>`;
-            $("#resultContainer").html(copiedLinkHtml + videoHtml + '<br><button id="downloadButton">Download</button>');
+          success: function(response) {
+            if(response.video){
+              var copiedLinkHtml = "<p>Copied Link: " + instagramLink + "</p>";
+              var videoHtml = `<div class="video-container mt-3">
+                  <div class="text-center">
+                    
+                  </div>
+                  <button class="btn btn-primary mt-3" id="downloadButton">Download</button>
+                </div>`;
+              $("#preview-section").html(videoHtml);
+            } else {
+              console.error('No video URL found in response');
+            }
           },
           error: function(xhr, status, error) {
             console.error('Error:', error);
@@ -138,8 +126,7 @@ $("#button-music").click(function (e) {
     });
 
     $(document).on('click', '#downloadButton', function() {
-        var videoUrl = $("#reelsVideo source").attr('src');
-        
+        var videoUrl = $("#video source").attr('src');
         var downloadLink = document.createElement('a');
         downloadLink.href = videoUrl;
         downloadLink.download = 'instagram_video.mp4';
@@ -148,3 +135,8 @@ $("#button-music").click(function (e) {
   });
 </script>
 @endsection
+<!-- <video width="280" height="500" id="video" style="border-radius:20px;" controls autoplay>
+                      <source src="${response.video}" type="video/mp4">
+                      Your browser does not support the video tag.
+                    </video> -->
+                    <!-- <iframe src="${response.video}" width="280" height="500" id="video" style="border-radius:20px;" frameborder="0" allowfullscreen></iframe> -->

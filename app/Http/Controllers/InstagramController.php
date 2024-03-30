@@ -17,9 +17,24 @@ class InstagramController extends Controller
     public function downloadReels(Request $request)
     {
         $reelsUrl = $request->input('reels_url');
-
-        $result = $this->instagramDownloader->downloadReels($reelsUrl);
-
-        return response()->json($result);
+        $videoContent = $this->instagramDownloader->downloadReels($reelsUrl);
+        $videoThumb = $videoContent[0]["thumb"];
+        $videoLink = $videoContent[0]["link"];
+    
+        return response(["thumb" => $videoThumb,"link" => $videoLink], 200);
     }
+
+    public function proxyInstagramVideo(Request $request)
+    {
+       $videoUrl = $request->input('video_url');
+       $client = new \GuzzleHttp\Client();
+       $response = $client->get($videoUrl);
+       $videoData = $response->getBody()->getContents();
+    
+        return response($videoData, 200, [
+           'Content-Type' => 'video/mp4',
+           'Content-Disposition' => 'inline',
+        ]);
+}
+
 }

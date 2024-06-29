@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Services\InstagramDownloader;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Validator;
 
 class InstagramController extends Controller
 {
@@ -16,25 +18,21 @@ class InstagramController extends Controller
 
     public function downloadReels(Request $request)
     {
-        $reelsUrl = $request->input('reels_url');
-        $videoContent = $this->instagramDownloader->downloadReels($reelsUrl);
-        $videoThumb = $videoContent[0]["thumb"];
-        $videoLink = $videoContent[0]["link"];
-    
-        return response(["thumb" => $videoThumb,"link" => $videoLink], 200);
+        // $validator = Validator::make($request->all(), [
+        //     'url' => 'required'
+        // ]);
+
+        // if ($validator->fails()) {
+        //     return response()->json(['error' => $validator->errors()], 422);
+        // }
+
+        $url = $request->input('reels_url');
+        $encode = urlencode($url);
+        $content = $this->instagramDownloader->downloadReels($url);
+        if (isset($content["data"])) {
+            return response()->json(['links' => $content['data']]);
+        } else {
+            return response()->json(['error' => 'Video URL not found'], 500);
+        }
     }
-
-    public function proxyInstagramVideo(Request $request)
-    {
-       $videoUrl = $request->input('video_url');
-       $client = new \GuzzleHttp\Client();
-       $response = $client->get($videoUrl);
-       $videoData = $response->getBody()->getContents();
-    
-        return response($videoData, 200, [
-           'Content-Type' => 'video/mp4',
-           'Content-Disposition' => 'inline',
-        ]);
-}
-
 }

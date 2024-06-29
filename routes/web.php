@@ -1,8 +1,8 @@
 <?php
 
+use App\Http\Controllers\InstagramController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ReelsController;
-use App\Http\Controllers\InstagramController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,10 +15,5 @@ use App\Http\Controllers\InstagramController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
-Route::get('/reels',[ReelsController::class,'index'])->name('home');
+Route::get('/',[ReelsController::class,'index'])->name('home');
 Route::post('/download-reels', [InstagramController::class, 'downloadReels'])->name('download');
-Route::get('/proxy-instagram-video', 'InstagramController@proxyInstagramVideo');
